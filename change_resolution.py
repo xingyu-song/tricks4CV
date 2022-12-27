@@ -23,7 +23,7 @@ input_path
 # configuration
 input_path = '/mnt/data/testing/ISCN_20220708_v2/7' # input directory path
 output_path = '/mnt/data/testing/ISCN_20220708_v2/1080/7' # output directory path
-output_type = '.avi' # output file type
+output_type = '.avi' # output video type
 
 # list all action directories in the input path
 dirs = os.listdir(input_path) 
@@ -32,21 +32,23 @@ dirs = os.listdir(input_path)
 for dir in dirs:
     dir_path = input_path + "/" + str(dir) # whole path of a action directory
     videos = os.listdir(dir_path) # all videos of the action
-    out = output_path + '/' + dir # output folders
+    out = output_path + '/' + dir # whole path of the output path
+    # output directory does not exist
     if not os.path.exists(out):
         os.makedirs(out)
     
-    # every file in folders
-    for file in videos:
-        file_dir_e = dir_path + "/" + str(file)
-        print('input: ', file_dir_e)
-        file_n = os.path.splitext(file_dir_e)[0]
-        filename = file_n.split('/')
-        output = out + '/' + filename[-1] + output_type
-        print('output: ', output)
+    # every video in videos
+    for video in videos:
+        video_path = dir_path + "/" + str(video) # whole path of an video 
+        print('input video path: ', video_path)
+        video_n = os.path.splitext(video_path)[0]
+        videoname = video_n.split('/')
+        # obtain output video path
+        output = out + '/' + videoname[-1] + output_type
+        print('output video path: ', output)
         
         # video property 
-        cap = cv2.VideoCapture(file_dir_e)
+        cap = cv2.VideoCapture(video_path) # read video
         fps = int(round(cap.get(cv2.CAP_PROP_FPS)))
         width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         height  = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
@@ -59,8 +61,9 @@ for dir in dirs:
             #'duration:', duration
             )
 
+        # does not need to be changed
         if height == 1080:
-            shutil.move(file_dir_e, output)
+            shutil.move(video_path, output)
         else: 
             # convert video
             success, _ = cap.read()
@@ -69,7 +72,7 @@ for dir in dirs:
             else:
                 fourcc = cv2.VideoWriter_fourcc('M','J','P','G')
             videowriter = cv2.VideoWriter(output, fourcc, 30, (1080,1920)) # 2k: 2048x1080 1080: 1920x1080 720p: 1280x720
-            print('resizing ', file_n)
+            print('resizing ', video_n)
             with tqdm() as pbar:
                 while success:
                     pbar.update()
