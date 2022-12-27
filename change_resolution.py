@@ -1,20 +1,26 @@
+# change_resolution.py
+# change the resolution of videos
+
 import cv2, os
 import shutil
 from tqdm import tqdm
 
-file_dir = '/mnt/data/testing/ISCN_20220708_v2/7'
-out_dir = '/mnt/data/testing/ISCN_20220708_v2/1080/7'
-out_type = '.avi'
+# input directory, output directory and output video type
+# directory where the video file located 
+input_dir = '/mnt/data/testing/ISCN_20220708_v2/7' # input file directory
+output_dir = '/mnt/data/testing/ISCN_20220708_v2/1080/7' # output file directory 
+output_type = '.avi' # output file type
 
-dirs = os.listdir(file_dir) 
+# list all video files in the input path
+dirs = os.listdir(input_dir) 
 
-# every folder in dirs
+# every video files in dirs
 for dir in dirs:
-    file_dir_d = file_dir + "/" + str(dir)
+    file_dir_d = input_dir + "/" + str(dir)
     #print(file_dir_d)
     files = os.listdir(file_dir_d) # all files 
     #print(files)
-    out = out_dir + '/' + dir # output folders
+    out = output_dir + '/' + dir # output folders
     if not os.path.exists(out):
         os.makedirs(out)
     
@@ -24,7 +30,7 @@ for dir in dirs:
         print('input: ', file_dir_e)
         file_n = os.path.splitext(file_dir_e)[0]
         filename = file_n.split('/')
-        output = out + '/' + filename[-1] + out_type
+        output = out + '/' + filename[-1] + output_type
         print('output: ', output)
         
         # video property 
@@ -46,7 +52,7 @@ for dir in dirs:
         else: 
             # convert video
             success, _ = cap.read()
-            if out_type == '.mp4':
+            if output_type == '.mp4':
                 fourcc = cv2.VideoWriter_fourcc('M','P','4','V')
             else:
                 fourcc = cv2.VideoWriter_fourcc('M','J','P','G')
