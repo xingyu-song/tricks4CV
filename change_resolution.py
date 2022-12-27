@@ -1,32 +1,44 @@
 # change_resolution.py
-# change the resolution of videos
+# change the resolution of videos of different actions in different folders
 
 import cv2, os
 import shutil
 from tqdm import tqdm
 
-# input directory, output directory and output video type
-# directory where the video file located 
-input_dir = '/mnt/data/testing/ISCN_20220708_v2/7' # input file directory
-output_dir = '/mnt/data/testing/ISCN_20220708_v2/1080/7' # output file directory 
+# input path, output path and output video type
+
+'''
+directory structure:
+input_path
+├── action1
+│   ├── video1_1.mp4
+│   ├── video1_2.mp4
+│   ├── ...
+├── action2
+│   ├── video2_1.mp4
+│   ├── video2_2.mp4
+│   ├── ...
+├── ......
+'''
+# configuration
+input_path = '/mnt/data/testing/ISCN_20220708_v2/7' # input directory path
+output_path = '/mnt/data/testing/ISCN_20220708_v2/1080/7' # output directory path
 output_type = '.avi' # output file type
 
-# list all video files in the input path
-dirs = os.listdir(input_dir) 
+# list all action directories in the input path
+dirs = os.listdir(input_path) 
 
-# every video files in dirs
+# every directory in the directory list
 for dir in dirs:
-    file_dir_d = input_dir + "/" + str(dir)
-    #print(file_dir_d)
-    files = os.listdir(file_dir_d) # all files 
-    #print(files)
-    out = output_dir + '/' + dir # output folders
+    dir_path = input_path + "/" + str(dir) # whole path of a action directory
+    videos = os.listdir(dir_path) # all videos of the action
+    out = output_path + '/' + dir # output folders
     if not os.path.exists(out):
         os.makedirs(out)
     
     # every file in folders
-    for file in files:
-        file_dir_e = file_dir_d + "/" + str(file)
+    for file in videos:
+        file_dir_e = dir_path + "/" + str(file)
         print('input: ', file_dir_e)
         file_n = os.path.splitext(file_dir_e)[0]
         filename = file_n.split('/')
