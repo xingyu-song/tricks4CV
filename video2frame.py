@@ -33,30 +33,46 @@ dirs = os.listdir(input_path) # climb, cut, launcher
 
 # each directory in the directoy list 
 for dir in dirs:
-    input_action_file = input_path + '/' + dir # ./climb, ./cut, ./launcher
-    output_action_file = output_path + '/' + dir 
-    video_files = os.listdir(input_action_file) # all videos for the action
+    # add the directory name into the input path
+    input_dir_path = input_path + '/' + dir # path of input directories
+    # add the directory name into the output path
+    output_dir_path = output_path + '/' + dir # path of output directories
+    # list all videos in the directroy
+    videos_list = os.listdir(input_dir_path)
     
-    for file in video_files:
-        video_name = file.split('.')[0]
-        input_file = input_action_file + '/' + file
-        output_file = output_action_file + '/' + video_name
+    # each video in the videos list
+    for video in videos_list: # 'video' with extension filename
+        # obtain the video name without extension (".mp4", ".avi")
+        video_name = video.split('.')[0]
+        # obtain the full path of input video file path ("xxx/xxx/dir_name/video_name.mp4")
+        input_video_path = input_dir_path + '/' + video
+        # obtain the folder contains frames of a video
+        output_framefolder_path = output_dir_path + '/' + video_name
+        
         print('segmenting:', video_name)
-        print('input:', input_file)
-        print('output:', output_file)
+        print('input:', input_video_path)
+        print('output:', output_framefolder_path)
 
-        if not os.path.exists(output_file):
-            os.makedirs(output_file)
+        # create the folder of output frame if possible
+        if not os.path.exists(output_framefolder_path):
+            os.makedirs(output_framefolder_path)
 
-        cap = cv2.VideoCapture(input_file)
+        # capture the video from the path 
+        cap = cv2.VideoCapture(input_video_path)
+        # if captured successfully 
         success, _ = cap.read()    
-        count = 1     
-        with tqdm() as pbar:
+        count = 1 # count of frame
+
+        # initialize the progress bar
+        with tqdm() as pbar: # progerss bar
+            # captured successfully
             while success:
                 pbar.update() 
                 success, frame = cap.read()
                 try:
-                    out = output_file + '/' + str(int(count)) + '.jpg'
+                    # output the frames
+                    out = output_framefolder_path + '/' + str(int(count)) + '.jpg'
+                    # write into folders
                     cv2.imwrite(out, frame)
                     count += 1
                 except:
