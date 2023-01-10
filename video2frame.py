@@ -1,3 +1,6 @@
+# video2frame.py
+# convert video into frames
+
 from itertools import count
 from re import I
 from typing import Counter
@@ -5,18 +8,33 @@ import cv2
 import os
 from tqdm import tqdm
 
+# input path, output path and output video type
 
+'''
+directory structure:
+input_path
+├── action1
+│   ├── video1_1.mp4
+│   ├── video1_2.mp4
+│   ├── ...
+├── action2
+│   ├── video2_1.mp4
+│   ├── video2_2.mp4
+│   ├── ...
+├── ......
+'''
 
-input_dir = '/mnt/data/2022_11_3'
-output_dir = '/mnt/data/2022_11_3_frame'
+# configuration
+input_path = '/mnt/data/2022_11_3' # input path lead to the directory contains videos need to be convert
+output_path = '/mnt/data/2022_11_3_frame' # output path
 
+# list all directories of the input path
+dirs = os.listdir(input_path) # climb, cut, launcher
 
-
-dirs = os.listdir(input_dir) # climb, cut, launcher
-
+# each directory in the directoy list 
 for dir in dirs:
-    input_action_file = input_dir + '/' + dir # ./climb, ./cut, ./launcher
-    output_action_file = output_dir + '/' + dir 
+    input_action_file = input_path + '/' + dir # ./climb, ./cut, ./launcher
+    output_action_file = output_path + '/' + dir 
     video_files = os.listdir(input_action_file) # all videos for the action
     
     for file in video_files:
@@ -48,8 +66,8 @@ for dir in dirs:
             cap.release()
 
 sym = '/'
-input_dir = sym.join(input_dir.split('/')[0:-1])
-output_dir = sym.join(output_dir.split('/')[0:-1])
+input_path = sym.join(input_path.split('/')[0:-1])
+output_path = sym.join(output_path.split('/')[0:-1])
 
 
 

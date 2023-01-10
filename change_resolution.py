@@ -20,15 +20,16 @@ input_path
 │   ├── ...
 ├── ......
 '''
+
 # configuration
 input_path = '/mnt/data/testing/ISCN_20220708_v2/7' # input directory path
 output_path = '/mnt/data/testing/ISCN_20220708_v2/1080/7' # output directory path
 output_type = '.avi' # output video type
 
-# list all action directories in the input path
+# list all directories of the input path
 dirs = os.listdir(input_path) 
 
-# every directory in the directory list
+# each directory in the directory list
 for dir in dirs:
     dir_path = input_path + "/" + str(dir) # whole path of a action directory
     videos = os.listdir(dir_path) # all videos of the action
@@ -37,7 +38,7 @@ for dir in dirs:
     if not os.path.exists(out):
         os.makedirs(out)
     
-    # every video in videos
+    # each video in videos
     for video in videos:
         video_path = dir_path + "/" + str(video) # whole path of an video 
         print('input video path: ', video_path)
